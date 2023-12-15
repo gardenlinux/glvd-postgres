@@ -9,4 +9,4 @@ openssl req -newkey rsa:4096 \
             -keyout /var/lib/postgresql/data/pgdata/server.key \
             -subj "/C=DE/ST=BW/L=Walldorf/O=Security/OU=IT Department/CN=GLVD"
 
-cp /etc/posttgresql/postgresql.conf /var/lib/postgresql/data/pgdata/.
+cp /etc/postgresql/postgresql.conf /var/lib/postgresql/data/pgdata/.
