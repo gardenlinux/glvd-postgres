@@ -36,7 +36,7 @@ jobs:
         images: |
           ghcr.io/${{ github.repository }}
         tags: |
-          type=edge
+          type=edge,suffix=${{ matrix.image_variant }}
           type=ref,event=pr
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -57,7 +57,6 @@ jobs:
         platforms: linux/amd64,linux/arm64
         file: Containerfile
         push: true
-        # fixme: use steps.meta.outputs.tags again
-        tags: edge${{ matrix.image_variant }}
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: container_variant=${{ matrix.image_variant }}
