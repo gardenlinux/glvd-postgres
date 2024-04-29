@@ -36,7 +36,7 @@ jobs:
         images: |
           ghcr.io/${{ github.repository }}
         tags: |
-          type=edge,suffix=${{ matrix.image_variant }}
+          type=edge,enable=true,priority=700,prefix=,suffix=${{ matrix.image_variant }},branch=$repo.default_branch
           type=ref,event=pr
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
