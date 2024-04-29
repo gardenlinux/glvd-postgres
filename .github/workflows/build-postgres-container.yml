@@ -15,7 +15,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        image_variant: ['', 'sampledata', 'notls']
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
@@ -56,3 +58,4 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: container_variant=${{ matrix.image_variant }}
