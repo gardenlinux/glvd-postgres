@@ -1,6 +1,7 @@
 name: build
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
@@ -56,6 +57,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         file: Containerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        # fixme: use steps.meta.outputs.tags again
+        tags: edge${{ matrix.image_variant }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: container_variant=${{ matrix.image_variant }}
