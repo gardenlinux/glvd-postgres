@@ -28,19 +28,19 @@ jobs:
       with:
         platforms: linux/amd64,linux/arm64
 
-    - name: Docker meta
-      id: meta
-      if: ${{ github.event_name != 'pull_request' }}
-      uses: docker/metadata-action@v5
-      with:
-        images: |
-          ghcr.io/${{ github.repository }}
-        tags: |
-          type=edge,enable=true,priority=700,prefix=,suffix=${{ matrix.image_variant }},branch=$repo.default_branch
-          type=ref,event=pr
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}}
+    # - name: Docker meta
+    #   id: meta
+    #   if: ${{ github.event_name != 'pull_request' }}
+    #   uses: docker/metadata-action@v5
+    #   with:
+    #     images: |
+    #       ghcr.io/${{ github.repository }}
+    #     tags: |
+    #       type=edge,enable=true,priority=700,prefix=,suffix=${{ matrix.image_variant }},branch=$repo.default_branch
+    #       type=ref,event=pr
+    #       type=semver,pattern={{version}}
+    #       type=semver,pattern={{major}}.{{minor}}
+    #       type=semver,pattern={{major}}
 
     - name: Login to GitHub Container Registry
       if: ${{ github.event_name != 'pull_request' }}
@@ -52,11 +52,21 @@ jobs:
 
     - name: Build and push image
       if: ${{ github.event_name != 'pull_request' }}
-      uses: docker/build-push-action@v5
-      with:
-        platforms: linux/amd64,linux/arm64
-        file: Containerfile
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: container_variant=${{ matrix.image_variant }}
+      run: |
+        docker buildx build --file=Containerfile --platform=linux/amd64,linux/arm64 --push --build-arg container_variant=${{ matrix.image_variant }} --tag=ghcr.io/gardenlinux/glvd-postgres:edge${{ matrix.image_variant }} .
+
+    - name: Build image in PR
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        docker buildx build --file=Containerfile --platform=linux/amd64,linux/arm64 --load --build-arg container_variant=${{ matrix.image_variant }} --tag=ghcr.io/gardenlinux/glvd-postgres:edge${{ matrix.image_variant }} .
+
+    # - name: Build and push image
+    #   if: ${{ github.event_name != 'pull_request' }}
+    #   uses: docker/build-push-action@v5
+    #   with:
+    #     platforms: linux/amd64,linux/arm64
+    #     file: Containerfile
+    #     push: true
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }}
+    #     build-args: container_variant=${{ matrix.image_variant }}
