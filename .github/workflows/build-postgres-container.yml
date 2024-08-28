@@ -56,6 +56,8 @@ jobs:
         rm glvd.sql
         gh run download 10579393786 -n glvd.sql --repo gardenlinux/glvd-contrib
         ls -la
+      env:
+        GH_TOKEN: ${{ github.token }}
 
     - name: Build and push image
       if: ${{ github.event_name != 'pull_request' }}
