@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image_variant: ['', 'sampledata', 'notls']
+        image_variant: ['', 'sampledata', 'notls', 'fulldata']
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
@@ -49,6 +49,13 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Download data for full data variant
+      if: ${{ matrix.image_variant == 'fulldata' }}
+      run: |
+        rm glvd.sql
+        gh run download 10579393786 -n glvd.sql --repo gardenlinux/glvd-contrib
+        ls -la
 
     - name: Build and push image
       if: ${{ github.event_name != 'pull_request' }}

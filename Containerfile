@@ -10,6 +10,11 @@ COPY glvd.sql /docker-entrypoint-initdb.d/glvd.sql
 COPY postgresql_notls.conf /etc/postgresql/postgresql.conf
 ENV VARIANT=SAMPLEDATA
 
+FROM base_container AS variantfulldata
+COPY glvd.sql /docker-entrypoint-initdb.d/glvd.sql
+COPY postgresql_notls.conf /etc/postgresql/postgresql.conf
+ENV VARIANT=FULLDATA
+
 FROM base_container AS variantnotls
 COPY postgresql_notls.conf /etc/postgresql/postgresql.conf
 ENV VARIANT=NOTLS
