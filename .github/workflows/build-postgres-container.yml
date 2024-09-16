@@ -52,7 +52,7 @@ jobs:
       - name: Check manifest
         run: |
           set -x
-          buildah manifest inspect ${{ steps.build_image_multiplatform.outputs.image }}:${{ env.IMAGE_TAG }}
+          buildah manifest inspect ${{ steps.build_image.outputs.image }}:${{ env.IMAGE_TAG }}
 
       - name: Push To ghcr.io
         id: push-to-ghcr
