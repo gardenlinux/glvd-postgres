@@ -54,7 +54,8 @@ jobs:
       if: ${{ matrix.image_variant == 'fulldata' }}
       run: |
         rm glvd.sql
-        gh run download 10886065469 -n glvd.sql --repo gardenlinux/glvd-contrib
+        LATEST_RUN_ID=$(gh run list --repo gardenlinux/glvd-contrib --branch main --json workflowDatabaseId --limit 1 | jq -r '.[0].workflowDatabaseId')
+        gh run download $LATEST_RUN_ID -n glvd.sql --repo gardenlinux/glvd-contrib
         ls -la
       env:
         GH_TOKEN: ${{ github.token }}
