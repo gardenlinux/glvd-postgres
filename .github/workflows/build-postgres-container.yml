@@ -12,6 +12,8 @@ permissions:
   contents: read
   # Push container images
   packages: write
+  # This is required for requesting the JWT
+  id-token: write
 
 jobs:
   build:
@@ -68,3 +70,17 @@ jobs:
       - name: Print image url
         if: ${{ github.event_name != 'pull_request' }}
         run: echo "Image pushed to ${{ steps.push-to-ghcr.outputs.registry-paths }}"
+
+      - name: Get OIDC token
+        id: get-token
+        run: |
+          IDTOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=glvd" | jq -r '.value')
+          echo "idToken=${IDTOKEN}" >> $GITHUB_OUTPUT
+
+      - uses: azure/k8s-set-context@v4
+        with:
+           method: kubeconfig
+           kubeconfig: "${{ secrets.KUBECONFIG }}"
+
+      - name: Deploy the image
+        run: kubectl --namespace default --token "${{ steps.get-token.outputs.idToken }}" set image sts/glvd-database glvd-postgres=ghcr.io/gardenlinux/glvd-postgres@${{ steps.push-to-ghcr.outputs.digest }}
