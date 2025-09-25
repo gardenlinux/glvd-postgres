@@ -1,4 +1,4 @@
-ARG base=docker.io/library/postgres:17-bookworm
+ARG base=docker.io/library/postgres:17-trixie
 FROM $base
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends postgresql-17-debversion && \
