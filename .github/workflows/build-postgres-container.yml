@@ -21,7 +21,7 @@ jobs:
 
     env:
       IMAGE_NAME: ghcr.io/gardenlinux/glvd-postgres
-      IMAGE_TAG: latest
+      IMAGE_TAG: '18'
 
     steps:
       - name: Checkout repo
@@ -58,7 +58,7 @@ jobs:
 
       - name: Push To ghcr.io
         id: push-to-ghcr
-        if: ${{ github.event_name != 'pull_request' }}
+        # if: ${{ github.event_name != 'pull_request' }}
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ steps.build_image.outputs.image }}
