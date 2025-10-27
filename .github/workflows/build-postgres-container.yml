@@ -22,6 +22,10 @@ jobs:
     env:
       IMAGE_NAME: ghcr.io/gardenlinux/glvd-postgres
       IMAGE_TAG: latest
+      # Change this if you fork the repo
+      IMAGE_NAME_ORG: gardenlinux
+      # Change this if you fork the repo
+      OIDC_AUDIENCE: glvd
 
     steps:
       - name: Checkout repo
