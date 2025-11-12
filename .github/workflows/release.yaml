@@ -11,7 +11,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ghcr.io/gardenlinux/glvd-postgres
+      IMAGE_NAME: glvd-postgres
       IMAGE_NAME_ORG: gardenlinux
 
     steps:
