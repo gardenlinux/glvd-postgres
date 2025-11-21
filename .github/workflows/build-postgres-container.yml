@@ -87,4 +87,4 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         env:
           KUBECONFIG: kubeconfig.yaml
-        run: kubectl --namespace default set image sts/glvd-database glvd-postgres=ghcr.io/gardenlinux/glvd-postgres@${{ steps.push-to-ghcr.outputs.digest }}
+        run: kubectl --namespace glvd set image sts/glvd-database glvd-postgres=ghcr.io/gardenlinux/glvd-postgres@${{ steps.push-to-ghcr.outputs.digest }}
